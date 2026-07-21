@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{%block content %}
+
+<div class="container">
+    <div class="form-card">
+        <h1>Welcome Back</h1>
+        <p>Login to continue managing your notes.</p>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button type="submit" class="add-btn">
+                Login
+            </button>
+        </form>
+
+      <p class="auth-link">
+        <a href="{% url 'password_reset' %}">Forgot your password?</a>
+    </p>
+
+        <p class="auth-link">
+            Don't have an account?
+            <a href="{% url 'signup' %}">Create one</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+    <div class="form-card">
+        <h1>Create Account</h1>
+        <p>Sign up to start managing your notes.</p>
+
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="add-btn">Sign Up</button>
+        </form>
+
+        <p class="auth-link">
+            Already have an account?
+            <a href="{% url 'login' %}">Log in</a>
+        </p>
+    </div>
+</div>
+<script>
+document.querySelectorAll('input[type="password"]').forEach(function(input) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'password-wrapper';
+    input.parentNode.insertBefore(wrapper, input);
+    wrapper.appendChild(input);
+
+    const toggle = document.createElement('button');
+    toggle.type = 'button';
+    toggle.className = 'password-toggle';
+    toggle.textContent = '👁️';
+    wrapper.appendChild(toggle);
+
+    toggle.addEventListener('click', function() {
+        const showing = input.type === 'text';
+        input.type = showing ? 'password' : 'text';
+        toggle.textContent = showing ? '👁️' : '🙈';
+    });
+});
+</script>
+{% endblock %}

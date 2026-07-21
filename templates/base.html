@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bloomateleir Notes</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+
+    <nav>
+        <div class="nav-inner">
+            <h6><em>bloomateleir notes</em></h6>
+
+            <ul>
+                <li><a href="{% url 'homepage' %}">Home</a></li>
+
+                    {% if request.user.is_authenticated %}
+                        <li><a href="{% url 'trash' %}">Trash</a></li>
+                        <li><a href="{% url 'logout' %}">Logout</a></li>
+                    {% else %}
+                        <li><a href="{% url 'login' %}">Login</a></li>
+                    {% endif %}
+
+                <li>
+                    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode">
+                        🌙
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="{{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+    <script>
+        const root = document.documentElement;
+        const toggleBtn = document.getElementById('themeToggle');
+
+        const saved = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const initial = saved || (prefersDark ? 'dark' : 'light');
+        root.setAttribute('data-theme', initial);
+        toggleBtn.textContent = initial === 'dark' ? '☀️' : '🌙';
+
+        toggleBtn.addEventListener('click', () => {
+            const current = root.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            root.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            toggleBtn.textContent = next === 'dark' ? '☀️' : '🌙';
+        });
+    </script>
+
+</body>
+</html>

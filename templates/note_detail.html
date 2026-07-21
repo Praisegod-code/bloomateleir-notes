@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <div class="note-detail-card">
+        <h1>{{ note.title }}</h1>
+
+        {% if note.attachment %}
+            <p><a href="{{ note.attachment.url }}" target="_blank">View attachment</a></p>
+        {% endif %}
+
+        <div class="note-content">
+            {{ rendered_content }}
+        </div>
+
+        <div class="note-info">
+            <p><strong>Created:</strong> {{ note.created_at }}</p>
+            <p><strong>Last Updated:</strong> {{ note.updated_at }}</p>
+        </div>
+
+        <div class="note-detail-actions">
+            <a href="{% url 'edit_note' note.id %}" class="btn">Edit</a>
+            <a href="{% url 'delete_note' note.id %}" class="btn btn-danger">Delete</a>
+            <a href="{% url 'homepage' %}" class="cancel-btn">Back to Notes</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+
+<header>
+    <div class="eyebrow">Archive</div>
+    <h1>Trash</h1>
+    <p>Deleted notes stay here until you restore or permanently remove them.</p>
+</header>
+
+<section class="notes">
+    {% if notes %}
+        {% for note in notes %}
+        <div class="note-card color-{{ note.color }}">
+            <h2>{{ note.title }}</h2>
+            <p>{{ note.content|truncatechars:120 }}</p>
+            <small>Created: {{ note.created_at }}</small>
+
+            <div class="note-detail-actions">
+                <form method="POST" action="{% url 'restore_note' note.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="add-btn">Restore</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="note-card empty-state">
+            <h2>Trash is empty</h2>
+            <p>Deleted notes will show up here.</p>
+        </div>
+    {% endif %}
+</section>
+
+{% endblock %}
