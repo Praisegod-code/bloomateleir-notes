@@ -23,7 +23,7 @@
                     required>{{ note.content }}
                 </textarea>
 
-                <div class="checkbox-group">
+                {% comment %} <div class="checkbox-group">
                     <input
                         type="checkbox"
                         id="completed"
@@ -31,19 +31,19 @@
 
                         {% if note.completed %}
                             checked
-                        {% endif %}>
+                        {% endif %}> {% endcomment %}
 
 
 
-                </div>
-                <label for="color">Color</label><br>
+                {% comment %} </div> {% endcomment %}
+                {% comment %} <label for="color">Color</label><br>
                     <select name="color" id="color">
                         <option value="default" {% if note.color == "default" %}selected{% endif %}>Default</option>
                         <option value="yellow" {% if note.color == "yellow" %}selected{% endif %}>Yellow</option>
                         <option value="pink" {% if note.color == "pink" %}selected{% endif %}>Pink</option>
                         <option value="blue" {% if note.color == "blue" %}selected{% endif %}>Blue</option>
                         <option value="green" {% if note.color == "green" %}selected{% endif %}>Green</option>
-                    </select>
+                    </select> {% endcomment %}
 
                 <button type="submit" class="save-btn">
                      Update Note
