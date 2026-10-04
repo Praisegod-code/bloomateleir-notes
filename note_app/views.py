@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+from django.templatetags.static import static
 from django.contrib.auth import authenticate, login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -174,3 +175,35 @@ def logout_view(request):
     auth_logout(request)
     messages.success(request, 'You have been successfully logged out.')
     return redirect('login')
+
+def manifest(request):
+    data = {
+        "name": "Bloomateleir Notes",
+        "id": "/",
+        "short_name": "Notes",
+        "description": "A calm space for your notes.",
+        "start_url": "/",
+        "scope": "/",
+        "display": "standalone",
+        "background_color": "#F6F5F0",
+        "theme_color": "#6B8F71",
+        "icons": [
+            {"src": static("icons/icon-192.png"), "sizes": "192x192", "type": "image/png", "purpose": "any"},
+            {"src": static("icons/icon-512.png"), "sizes": "512x512", "type": "image/png", "purpose": "any"},
+            {"src": static("icons/icon-512.png"), "sizes": "512x512", "type": "image/png", "purpose": "maskable"},
+        ],
+    }
+    return JsonResponse(data, content_type="application/manifest+json")
+
+
+SERVICE_WORKER_JS = """
+self.addEventListener('install', () => self.skipWaiting());
+self.addEventListener('activate', (event) => event.waitUntil(self.clients.claim()));
+self.addEventListener('fetch', () => {});
+"""
+
+
+def service_worker(request):
+    response = HttpResponse(SERVICE_WORKER_JS, content_type="application/javascript")
+    response["Cache-Control"] = "no-cache"
+    return response

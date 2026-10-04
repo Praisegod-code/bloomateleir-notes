@@ -8,6 +8,8 @@ urlpatterns = [
     path('signup/', views.signup, name='signup'),
     path('login/', views.login_view, name='login'),
     path('logout_view/', views.logout_view, name='logout'),
+        path('manifest.json', views.manifest, name='manifest'),
+    path('sw.js', views.service_worker, name='service_worker'),
 
     # Notes
     path('create-note/', views.create_note, name='create_note'),
