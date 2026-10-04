@@ -75,6 +75,9 @@
         {% block content %}{% endblock %}
     </main>
 
+
+        <button id="installBtn" class="install-fab" type="button" hidden>Install app</button>
+
     <script>
         const root = document.documentElement;
         const toggleBtn = document.getElementById('themeToggle');
@@ -98,6 +101,29 @@
                 navigator.serviceWorker.register('/sw.js', { scope: '/' });
             });
         }
+    </script>
+
+        <script>
+        let deferredPrompt = null;
+        const installBtn = document.getElementById('installBtn');
+
+        window.addEventListener('beforeinstallprompt', function (e) {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBtn.hidden = false;
+        });
+
+        installBtn.addEventListener('click', async function () {
+            if (!deferredPrompt) return;
+            deferredPrompt.prompt();
+            await deferredPrompt.userChoice;
+            deferredPrompt = null;
+            installBtn.hidden = true;
+        });
+
+        window.addEventListener('appinstalled', function () {
+            installBtn.hidden = true;
+        });
     </script>
 
 </body>
