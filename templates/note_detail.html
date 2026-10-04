@@ -1,27 +1,53 @@
 {% extends "base.html" %}
+{% block title %}{{ note.title }} — Bloomateleir Notes{% endblock %}
+
 {% block content %}
-<div class="container">
-    <div class="note-detail-card">
-        <h1>{{ note.title }}</h1>
-
-        {% if note.attachment %}
-            <p><a href="{{ note.attachment.url }}" target="_blank">View attachment</a></p>
-        {% endif %}
-
-        <div class="note-content">
-            {{ rendered_content }}
-        </div>
-
-        <div class="note-info">
-            <p><strong>Created:</strong> {{ note.created_at }}</p>
-            <p><strong>Last Updated:</strong> {{ note.updated_at }}</p>
-        </div>
-
-        <div class="note-detail-actions">
-            <a href="{% url 'edit_note' note.id %}" class="btn">Edit</a>
-            <a href="{% url 'delete_note' note.id %}" class="btn btn-danger">Delete</a>
-            <a href="{% url 'homepage' %}" class="cancel-btn">Back to Notes</a>
-        </div>
+<div class="note-detail-wrapper">
+    <!-- Back Button / Top Action Bar -->
+    <div class="detail-nav">
+        <a href="{% url 'homepage' %}" class="back-link">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span>Back to Notes</span>
+        </a>
     </div>
+
+    <!-- Note Detail Card -->
+    <article class="note-detail-card color-{{ note.color|default:'default' }}">
+        <header class="detail-header">
+            <h1 class="detail-title">{{ note.title }}</h1>
+            <div class="detail-timestamps">
+                <span>Created {{ note.created_at|date:"N j, Y, g:i a" }}</span>
+                {% if note.updated_at != note.created_at %}
+                    <span class="bullet">•</span>
+                    <span>Updated {{ note.updated_at|date:"N j, Y, g:i a" }}</span>
+                {% endif %}
+            </div>
+        </header>
+
+        <div class="detail-body">
+            <p>{{ note.content|linebreaks }}</p>
+        </div>
+
+        <footer class="detail-actions">
+            <a href="{% url 'edit_note' note.id %}" class="btn btn-primary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                </svg>
+                <span>Edit Note</span>
+            </a>
+            
+            <a href="{% url 'delete_note' note.id %}" class="btn btn-danger">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+                <span>Delete</span>
+            </a>
+        </footer>
+    </article>
 </div>
 {% endblock %}
